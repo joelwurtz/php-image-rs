@@ -7,7 +7,7 @@ use fast_image_resize::{IntoImageView, ResizeAlg, ResizeOptions, Resizer};
 use image::{ImageEncoder, ImageReader};
 use image::codecs::webp::WebPEncoder;
 use image::imageops::FilterType;
-use webp::{Encoder};
+use webp::{Encoder, WebPConfig};
 
 pub enum ImageType {
     PNG,
@@ -133,7 +133,11 @@ impl ImageScript {
 
         let encoder = Encoder::from_rgb(dst_image.buffer(), dst_width, dst_height);
         // Encode the image at a specified quality 0-100
-        let webp = encoder.encode_lossless();
+        let mut config = WebPConfig::new().unwrap();
+        config.near_lossless = 90;
+        config.method = 6;
+        config.low_memory = 1;
+        let webp = encoder.encode_advanced(&config).unwrap();
         // Define and write the WebP-encoded file to a given path
         std::fs::write(dest_path, &*webp).unwrap();
     }
