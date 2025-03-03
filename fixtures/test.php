@@ -1,7 +1,7 @@
 <?php
 
 $start = microtime(true);
-$source = "image.jpg";
+$source = __DIR__ . "/image.jpg";
 $iterations = 1;
 $script = new \ImageScript();
 
